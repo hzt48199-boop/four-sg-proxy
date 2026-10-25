@@ -47,12 +47,16 @@ class H(BaseHTTPRequestHandler):
                 self._json(502, {"ok": False, "error": str(e)})
                 return
             restricted = "restricted" in body and "current location" in body
+            markers = {m: (m in body) for m in
+                       ["CREATE_PAUSED", "CREATE_ACTIVE", "TRADING",
+                        "Binance Agent", "暂无资料", "No data"]}
             self._json(200, {
                 "ok": True,
                 "url": raw,
                 "status": status,
                 "restricted": restricted,
                 "length": len(body),
+                "markers": markers,
                 "snippet": body[:400],
             })
             return
